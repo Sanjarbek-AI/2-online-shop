@@ -1,0 +1,84 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="main-content">
+        <div class="wrap-banner">
+            <nav class="breadcrumb-bg">
+                <div class="container no-index">
+                    <div class="breadcrumb">
+                        <ol>
+                            <li>
+                                <a href="#">
+                                    <span>Home</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <span>My Account</span>
+                                </a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="acount head-acount">
+                <div class="container">
+                    <div id="main">
+                        <h1 class="title-page">My Account</h1>
+                        <div class="content" id="block-history">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <div class="row form-group">
+                                    <div class="col-md-8 mb-3">
+                                        <p>First Name:</p>
+                                        {{ form.first_name|add_class:"form-control" }}
+                                    </div>
+                                    <div class="col-md-8 mb-3">
+                                        <p>Last Name:</p>
+                                        {{ form.last_name|add_class:"form-control" }}
+                                    </div>
+                                    <div class="col-md-8 mb-3">
+                                        <p>Email:</p>
+                                        {{ form.email|add_class:"form-control" }}
+                                    </div>
+                                    <div class="col-md-8 mb-3">
+                                        <p>Country:</p>
+                                        {{ form.country|add_class:"form-control" }}
+                                    </div>
+                                    <div class="col-md-8 mb-3">
+                                        <p>Address:</p>
+                                        {{ form.address|add_class:"form-control" }}
+                                    </div>
+                                    <div class="col-md-8 mb-3">
+                                        <p>City:</p>
+                                        {{ form.city|add_class:"form-control" }}
+                                    </div>
+                                    <div class="col-md-8 mb-3">
+                                        <p>Phone:</p>
+                                        {{ form.phone|add_class:"form-control" }}
+                                    </div>
+                                    <div class="col-md-8 mb-3">
+                                        <button type="submit" class="btn btn-dark">Change</button>
+                                        <a href="{% url 'auth_password_change' %}">
+                                            <button type="button" class="btn btn-dark">Password Change</button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="order">
+                            <h4>Order
+                                <span class="detail">History</span>
+                            </h4>
+                            <p>You haven't placed any orders yet.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

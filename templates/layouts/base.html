@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="ie ie8">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Online Tech Booking</title>
+
+    <meta name="keywords" content="Furniture, Decor, Interior">
+    <meta name="description" content="Furnitica - Minimalist Furniture HTML Template">
+    <meta name="author" content="tivatheme">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/nivo-slider/css/nivo-slider.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/nivo-slider/css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/nivo-slider/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/font-material/css/material-design-iconic-font.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/slider-range/css/jslider.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/owl-carousel/assets/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/slick-slider/css/slick.css' %}">
+    <link rel="stylesheet" href="{% static 'libs/slick-slider/css/slick-theme.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reponsive.css' %}">
+</head>
+
+{% url 'about:about' as about %}
+{% url 'blog:list' as blog %}
+{% url 'product:list' as product %}
+{% url 'blog:detail' as blog_detail %}
+{% url 'product:detail' as product_detail %}
+{% url 'contact:create' as contact %}
+
+<body
+        {% if request.path == about %} id="about-us"
+        {% elif request.path == contact %} id="contact"
+        {% elif request.path == product %} id="product-sidebar-left"
+        {% elif request.path == blog %} id="blog-list-sidebar-left"
+        {% elif request.path == blog_detail %} id="blog-detail"
+        {% else %} id="product-detail"
+        {% endif %}
+        class="blog product-grid-sidebar-left user-wishlist user-acount product-cart checkout-cart product-checkout checkout-cart">
+
+{% include 'layouts/navbar.html' %}
+
+{% block content %}
+{% endblock %}
+
+{% include 'layouts/footer.html' %}
+
+{% include 'layouts/mobile-menu.html' %}
+
+{% include 'layouts/page-loader.html' %}
+
+
+<script src="{% static 'libs/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'libs/popper/popper.min.js' %}"></script>
+<script src="{% static 'libs/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'libs/nivo-slider/js/jquery.nivo.slider.js' %}"></script>
+<script src="{% static 'libs/owl-carousel/owl.carousel.min.js' %}"></script>
+<script src="{% static 'libs/slider-range/js/tmpl.js' %}"></script>
+<script src="{% static 'libs/slider-range/js/jquery.dependClass-0.1.js' %}"></script>
+<script src="{% static 'libs/slider-range/js/draggable-0.1.js' %}"></script>
+<script src="{% static 'libs/slider-range/js/jquery.slider.js' %}"></script>
+<script src="{% static 'libs/slick-slider/js/slick.min.js' %}"></script>
+<script src="{% static 'js/theme.js' %}"></script>
+
+{% block extra_js %}
+{% endblock %}
+</body>
+</html>

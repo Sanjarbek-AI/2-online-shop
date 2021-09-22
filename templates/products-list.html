@@ -1,0 +1,299 @@
+{% extends 'layouts/base.html' %}
+{% load my_tags %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+    <div class="main-content">
+        <div id="wrapper-site">
+            <div id="content-wrapper" class="full-width">
+                <div id="main">
+                    <div class="page-home">
+                        <nav class="breadcrumb-bg">
+                            <div class="container no-index">
+                                <div class="breadcrumb">
+                                    <ol>
+                                        <li>
+                                            <a href="{% url 'home:home' %}">
+                                                <span>Home</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'product:list' %}">
+                                                <span>All Products</span>
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </nav>
+                        <div class="container">
+                            <div class="content">
+                                <div class="row">
+                                    {% include 'layouts/products-filter.html' %}
+                                    <div class="col-sm-8 col-lg-9 col-md-8 product-container">
+                                        <h1>Filtered Products</h1>
+                                        <div class="js-product-list-top firt nav-top">
+                                            <div class="d-flex justify-content-around row">
+                                                <div class="col col-xs-12">
+                                                    <ul class="nav nav-tabs">
+                                                        <li>
+                                                            <a href="#grid" data-toggle="tab"
+                                                               class="active show fa fa-th-large"></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#list" data-toggle="tab" class="fa fa-list-ul"></a>
+                                                        </li>
+                                                    </ul>
+                                                    <div class="hidden-sm-down total-products">
+                                                        <p>There are 12 products.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col col-xs-12">
+                                                    <div class="d-flex sort-by-row justify-content-lg-end justify-content-md-end">
+
+                                                        <div class="products-sort-order dropdown">
+                                                            <select class="select-title">
+                                                                <option value="">Sort by</option>
+                                                                <option value="">Name, A to Z</option>
+                                                                <option value="">Name, Z to A</option>
+                                                                <option value="">Price, low to high</option>
+                                                                <option value="">Price, high to low</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-content product-items">
+                                            <div id="grid" class="related tab-pane fade in active show">
+                                                <div class="row">
+                                                    {% for product in products %}
+                                                        <div class="item text-center col-md-4">
+                                                            <div class="product-miniature js-product-miniature item-one first-item">
+                                                                <div class="thumbnail-container border">
+                                                                    <a href="{% url 'product:detail' pk=product.pk %}">
+                                                                        <img class="img-fluid image-cover"
+                                                                             src="{{ product.image_1.url }}" alt="img">
+                                                                        <img class="img-fluid image-secondary"
+                                                                             src="{{ product.image_2.url }}" alt="img">
+                                                                    </a>
+                                                                </div>
+                                                                <div class="product-description">
+                                                                    <div class="product-groups">
+                                                                        <div class="product-title">
+                                                                            <a href="{% url 'product:detail' pk=product.pk %}">
+                                                                                {{ product.title }}</a>
+                                                                        </div>
+                                                                        <div class="rating">
+                                                                            <div class="star-content">
+                                                                                <div class="star"></div>
+                                                                                <div class="star"></div>
+                                                                                <div class="star"></div>
+                                                                                <div class="star"></div>
+                                                                                <div class="star"></div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="product-group-price">
+                                                                            <div class="product-price-and-shipping">
+                                                                                <span class="price">£{{ product.price }}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="product-buttons d-flex justify-content-center">
+                                                                        <form action="#" method="post"
+                                                                              class="formAddToCart">
+                                                                            <input type="hidden" name="id_product"
+                                                                                   value="1">
+                                                                            <a {% if product|in_cart:request %}
+                                                                                style="background: red" {% endif %}
+                                                                                class="add-to-cart"
+                                                                                href="{% url 'product:add-to-cart' pk=product.pk %}?next={{ request.path }}?{{ request.GET.urlencode }}"
+                                                                                data-button-action="add-to-cart">
+                                                                                <i class="fa fa-shopping-cart"
+                                                                                   aria-hidden="true"></i>
+                                                                            </a>
+                                                                        </form>
+
+                                                                        <a {% if product|in_wishlist:request %}
+                                                                            style="background: red" {% endif %}
+                                                                            class="addToWishlist"
+                                                                            href="{% url 'product:add-wishlist' pk=product.pk %}?next={{ request.path }}?{{ request.GET.urlencode }}"
+                                                                            data-rel="1"
+                                                                            onclick="">
+                                                                            <i class="fa fa-heart"
+                                                                               aria-hidden="true"></i>
+                                                                        </a>
+
+                                                                        <a href="{% url 'product:detail' pk=product.pk %}"
+                                                                           class="quick-view hidden-sm-down"
+                                                                           data-link-action="quickview">
+                                                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                            <div id="list" class="related tab-pane fade">
+                                                <div class="row">
+                                                    <div class="item col-md-12">
+                                                        {% for product in products %}
+                                                            <div class="product-miniature item-one first-item">
+                                                                <div class="row">
+                                                                    <div class="col-md-4">
+                                                                        <div class="thumbnail-container border">
+                                                                            <a href="{% url 'product:detail' pk=product.pk %}">
+                                                                                <img class="img-fluid image-cover"
+                                                                                     src="{{ product.image_1.url }}"
+                                                                                     alt="img">
+                                                                                <img class="img-fluid image-secondary"
+                                                                                     src="{{ product.image_2.url }}"
+                                                                                     alt="img">
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-8">
+                                                                        <div class="product-description">
+                                                                            <div class="product-groups">
+                                                                                <div class="product-title">
+                                                                                    <a href="{% url 'product:detail' pk=product.pk %}">
+                                                                                        {{ product.title }}</a>
+                                                                                    {% if product.in_stock == True %}
+                                                                                        <span class="info-stock">
+                                                                                    <i class="fa fa-check-square-o"
+                                                                                       aria-hidden="true"></i>
+                                                                                         In Stock
+                                                                                    </span>
+                                                                                    {% else %}
+                                                                                        <span class="info-stock">
+                                                                                         <a style="color: red">Not In the Stock</a>
+                                                                                    </span>
+                                                                                    {% endif %}
+                                                                                </div>
+                                                                                <div class="rating">
+                                                                                    <div class="star-content">
+                                                                                        <div class="star"></div>
+                                                                                        <div class="star"></div>
+                                                                                        <div class="star"></div>
+                                                                                        <div class="star"></div>
+                                                                                        <div class="star"></div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="product-group-price">
+                                                                                    <div class="product-price-and-shipping">
+                                                                                        <span class="price">£{{ product.price }}</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="discription">
+                                                                                    {{ product.little_about }}
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="product-buttons d-flex">
+                                                                                <form action="#" method="post"
+                                                                                      class="formAddToCart">
+                                                                                    <a class="add-to-cart"
+                                                                                       href="{% url 'product:add-to-cart' pk=product.pk %}?next={{ request.path }}?{{ request.GET.urlencode }}"
+                                                                                       data-button-action="add-to-cart">
+                                                                                        <i class="fa fa-shopping-cart"
+                                                                                           aria-hidden="true"></i>
+                                                                                        {% if product|in_cart:request %}
+                                                                                            Remove from cart
+                                                                                        {% else %}
+                                                                                            Add to cart
+                                                                                        {% endif %}
+                                                                                    </a>
+                                                                                </form>
+                                                                                <a {% if product|in_wishlist:request %}
+                                                                                    style="background: red" {% endif %}
+                                                                                    class="addToWishlist"
+                                                                                    href="{% url 'product:add-wishlist' pk=product.pk %}?next={{ request.path }}?{{ request.GET.urlencode }}"
+                                                                                    data-rel="1"
+                                                                                    onclick="">
+                                                                                    <i class="fa fa-heart"
+                                                                                       aria-hidden="true"></i>
+                                                                                </a>
+                                                                                <a href="{% url 'product:detail' pk=product.pk %}"
+                                                                                   class="quick-view hidden-sm-down"
+                                                                                   data-link-action="quickview">
+                                                                                    <i class="fa fa-eye"
+                                                                                       aria-hidden="true"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="pagination">
+                                            <div class="js-product-list-top ">
+                                                <div class="d-flex justify-content-around row">
+                                                    <div class="showing col col-xs-12">
+                                                        <span>SHOWING {{ page_obj.start_index }}-{{ page_obj.end_index }}
+                                                            OF {{ page_obj.paginator.count }} ITEM(S)</span>
+                                                    </div>
+                                                    <div class="page-list col col-xs-12">
+                                                        <ul>
+                                                            {% if page_obj.has_previous %}
+                                                                <li>
+                                                                    <a rel="prev"
+                                                                       href="?page={{ page_obj.previous_page_number }}"
+                                                                       class="previous disabled js-search-link">
+                                                                        Previous
+                                                                    </a>
+                                                                </li>
+                                                            {% endif %}
+                                                            {% for page in page_obj.paginator.page_range %}
+                                                                <li class="current active">
+                                                                    <a rel="nofollow"
+                                                                       onclick="addUrlParameter('page', '{{ page }}')"
+                                                                       class="disabled js-search-link">
+                                                                        {{ page }}
+                                                                    </a>
+                                                                </li>
+                                                            {% endfor %}
+                                                            {% if page_obj.has_next %}
+                                                                <li>
+                                                                    <a rel="next"
+                                                                       href="?page={{ page_obj.next_page_number }}"
+                                                                       class="next disabled js-search-link">
+                                                                        Next
+                                                                    </a>
+                                                                </li>
+                                                            {% endif %}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+
+    <script>
+        function addUrlParameter(name, value) {
+            let searchParams = new URLSearchParams(window.location.search)
+            if (searchParams.has(name) && searchParams.get(name) === value) {
+                searchParams.delete(name)
+            } else {
+                searchParams.set(name, value)
+            }
+            window.location.search = searchParams.toString()
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+{% endblock %}

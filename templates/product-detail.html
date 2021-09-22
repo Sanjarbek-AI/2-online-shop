@@ -1,0 +1,525 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+    <div class="main-content">
+        <div id="wrapper-site">
+            <div id="content-wrapper">
+                <div id="main">
+                    <div class="page-home">
+                        <nav class="breadcrumb-bg">
+                            <div class="container no-index">
+                                <div class="breadcrumb">
+                                    <ol>
+                                        <li>
+                                            <a href="{% url 'home:home' %}">
+                                                <span>Home</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'product:list' %}">
+                                                <span>All Products</span>
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </nav>
+                        <div class="container">
+                            <div class="content">
+                                <div class="row">
+                                    <div class="sidebar-3 sidebar-collection col-lg-3 col-md-3 col-sm-4">
+                                        <div class="sidebar-block">
+                                            <div class="title-block">
+                                                Recent Products
+                                            </div>
+                                            <div class="product-content tab-content">
+                                                <div class="row">
+                                                    {% for product in recent_products %}
+                                                        <div class="item col-md-12">
+                                                            <div class="product-miniature item-one first-item d-flex">
+                                                                <div class="thumbnail-container border">
+                                                                    <a href="{% url 'product:detail' pk=product.pk %}">
+                                                                        <img class="img-fluid image-cover"
+                                                                             src="{{ product.image_1.url }}" alt="img">
+                                                                        <img class="img-fluid image-secondary"
+                                                                             src="{{ product.image_2.url }}" alt="img">
+                                                                    </a>
+                                                                </div>
+                                                                <div class="product-description">
+                                                                    <div class="product-groups">
+                                                                        <div class="product-title">
+                                                                            <a href="{% url 'product:detail' pk=product.pk %}">
+                                                                                {{ product.title }}
+                                                                            </a>
+                                                                        </div>
+                                                                        <div class="rating">
+                                                                            <div class="star-content">
+                                                                                <div class="star"></div>
+                                                                                <div class="star"></div>
+                                                                                <div class="star"></div>
+                                                                                <div class="star"></div>
+                                                                                <div class="star"></div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="product-group-price">
+                                                                            <div class="product-price-and-shipping">
+                                                                                <span class="price">£{{ product.price }}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="sidebar-block product-tags">
+                                            <div class="title-block">
+                                                Product Tags
+                                            </div>
+                                            <div class="block-content">
+                                                <ul class="listSidebarBlog list-unstyled">
+                                                    {% for tag in object.tags.all %}
+                                                        <li>
+                                                            <a href="/product/?tag={{ tag.pk }}"
+                                                               title="Show products matching tag Hot Trend">
+                                                                {{ tag.title }}
+                                                            </a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8 col-lg-9 col-md-9">
+                                        <div class="main-product-detail">
+                                            <h2>{{ object.title }}</h2>
+                                            <div class="product-single row">
+                                                <div class="product-detail col-xs-12 col-md-5 col-sm-5">
+                                                    <div class="page-content" id="content">
+                                                        <div class="images-container">
+                                                            <div class="js-qv-mask mask tab-content border">
+                                                                <div id="item1" class="tab-pane fade active in show">
+                                                                    <img src="{{ object.image_1.url }}" alt="img">
+                                                                </div>
+                                                                {% for image in object.images.all %}
+                                                                    <div id="item{{ forloop.counter|add:1 }}"
+                                                                         class="tab-pane fade">
+                                                                        <img src="{{ image.image.url }}" alt="img">
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                            <ul class="product-tab nav nav-tabs d-flex">
+                                                                <li class="active col">
+                                                                    <a href="#item1" data-toggle="tab"
+                                                                       aria-expanded="true" class="active show">
+                                                                        <img src="{{ object.image_1.url }}"
+                                                                             alt="img">
+                                                                    </a>
+                                                                </li>
+                                                                {% for image in object.images.all %}
+                                                                    <li class="col">
+                                                                        <a href="#item{{ forloop.counter|add:1 }}"
+                                                                           data-toggle="tab">
+                                                                            <img src="{{ image.image.url }}"
+                                                                                 alt="img">
+                                                                        </a>
+                                                                    </li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                            <div class="modal fade" id="product-modal" role="dialog">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <div class="modal-body">
+                                                                                <div class="product-detail">
+                                                                                    <div>
+                                                                                        <div class="images-container">
+                                                                                            <div class="js-qv-mask mask tab-content">
+                                                                                                <div id="modal-item1"
+                                                                                                     class="tab-pane fade active in show">
+                                                                                                    <img src="{{ object.image_1.url }}"
+                                                                                                         alt="img">
+                                                                                                </div>
+                                                                                                {% for image in object.images.all %}
+                                                                                                    <div id="modal-item{{ forloop.counter|add:1 }}"
+                                                                                                         class="tab-pane fade">
+                                                                                                        <img src="{{ image.image.url }}"
+                                                                                                             alt="img">
+                                                                                                    </div>
+                                                                                                {% endfor %}
+                                                                                            </div>
+                                                                                            <ul class="product-tab nav nav-tabs">
+                                                                                                <li class="active">
+                                                                                                    <a href="#modal-item1"
+                                                                                                       data-toggle="tab"
+                                                                                                       class=" active show">
+                                                                                                        <img src="{{ object.image_1.url }}"
+                                                                                                             alt="img">
+                                                                                                    </a>
+                                                                                                </li>
+                                                                                                {% for image in object.images.all %}
+                                                                                                    <li>
+                                                                                                        <a href="#modal-item{{ forloop.counter|add:1 }}"
+                                                                                                           data-toggle="tab">
+                                                                                                            <img src="{{ image.image.url }}"
+                                                                                                                 alt="img">
+                                                                                                        </a>
+                                                                                                    </li>
+                                                                                                {% endfor %}
+                                                                                            </ul>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="product-info col-xs-12 col-md-7 col-sm-7">
+                                                    <div class="detail-description">
+                                                        <div class="price-del">
+                                                            <span class="price">£{{ object.price }}</span>
+                                                            {% if object.in_stock == True %}
+                                                                <span class="float-right">
+                                                                    <span class="availb">Availability: </span>
+                                                                    <span class="check">
+                                                                        <i class="fa fa-check-square-o"
+                                                                           aria-hidden="true"></i>IN STOCK</span>
+                                                                </span>
+                                                            {% else %}
+                                                                <span class="float-right">
+                                                                    <span class="availb">Availability: </span>
+                                                                    <span class="check">
+                                                                        <i class="fa fa-check-square-o"
+                                                                           aria-hidden="true"></i>NOT IN THE STOCK</span>
+                                                                </span>
+                                                            {% endif %}
+                                                        </div>
+                                                        <p class="description">{{ object.little_about }}</p>
+                                                        <div class="option has-border d-lg-flex size-color">
+                                                            <div class="size">
+                                                                <span class="size">Size :</span>
+                                                                <select>
+                                                                    <option value="">Choose your size</option>
+                                                                    {% for size in object.sizes.all %}
+                                                                        <option value="">{{ size.title }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                            <div class="size">
+                                                                <span class="size ml-5">Colors :</span>
+                                                                <select>
+                                                                    <option value="">Choose your color</option>
+                                                                    {% for color in object.colors.all %}
+                                                                        <option value="">{{ color.title }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="has-border cart-area">
+                                                            <div class="product-quantity">
+                                                                <div class="qty">
+                                                                    <div class="input-group">
+                                                                        <span class="add">
+                                                                            <button class="btn btn-primary add-to-cart add-item"
+                                                                                    data-button-action="add-to-cart"
+                                                                                    type="submit">
+                                                                                <i class="fa fa-shopping-cart"
+                                                                                   aria-hidden="true"></i>
+                                                                                <span>Add to cart</span>
+                                                                            </button>
+                                                                            <a class="addToWishlist" href="#">
+                                                                                <i class="fa fa-heart"
+                                                                                   aria-hidden="true"></i>
+                                                                            </a>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="clearfix"></div>
+                                                            <p class="product-minimal-quantity">
+                                                            </p>
+                                                        </div>
+                                                        <div class="d-flex2 has-border">
+                                                            <div class="btn-group">
+                                                                <a href="#">
+                                                                    <i class="zmdi zmdi-share"></i>
+                                                                    <span>Share</span>
+                                                                </a>
+                                                                <a href="#" class="email">
+                                                                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                                                                    <span>SEN TO A FRIEND</span>
+                                                                </a>
+                                                                <a href="#" class="print">
+                                                                    <i class="zmdi zmdi-print"></i>
+                                                                    <span>Print</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="rating-comment has-border d-flex">
+                                                            <div class="review-description d-flex">
+                                                                <span>REVIEW :</span>
+                                                                <div class="rating">
+                                                                    <div class="star-content">
+                                                                        <div class="star"></div>
+                                                                        <div class="star"></div>
+                                                                        <div class="star"></div>
+                                                                        <div class="star"></div>
+                                                                        <div class="star"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="read after-has-border">
+                                                                <a href="#review">
+                                                                    <i class="fa fa-commenting-o color"
+                                                                       aria-hidden="true"></i>
+                                                                    <span>READ REVIEWS (3)</span>
+                                                                </a>
+                                                            </div>
+                                                            <div class="apen after-has-border">
+                                                                <a href="#review">
+                                                                    <i class="fa fa-pencil color"
+                                                                       aria-hidden="true"></i>
+                                                                    <span>WRITE A REVIEW</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="content">
+                                                            <p>SKU :
+                                                                <span class="content2">
+                                                                    <a href="#">ID: {{ object.pk }}</a>
+                                                                </span>
+                                                            </p>
+                                                            <p>Categories :
+                                                                <span class="content2">
+                                                                    {% for category in object.categories.all %}
+                                                                        <a href="#">{{ category.title }}</a>,
+                                                                    {% endfor %}
+                                                                </span>
+                                                            </p>
+                                                            <p>tags :
+                                                                <span class="content2">
+                                                                    {% for tag in object.tags.all %}
+                                                                        <a href="#">{{ tag.title }}</a>,
+                                                                    {% endfor %}
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="review">
+                                                <ul class="nav nav-tabs">
+                                                    <li class="active">
+                                                        <a data-toggle="tab" href="#description" class="active show">Description</a>
+                                                    </li>
+                                                    <li>
+                                                        <a data-toggle="tab" href="#review">Reviews (2)</a>
+                                                    </li>
+                                                </ul>
+
+                                                <div class="tab-content">
+                                                    <div id="description" class="tab-pane fade in active show">
+                                                        <p>{{ object.full_about }}</p>
+                                                    </div>
+
+                                                    <div id="review" class="tab-pane fade">
+                                                        <div class="spr-form">
+                                                            <div class="user-comment">
+                                                                {% for comment in object.get_comments %}
+                                                                    <div class="spr-review">
+                                                                        <div class="spr-review-header">
+                                                                        <span class="spr-review-header-byline">
+                                                                            <strong>{{ self.request.user.first_name }}</strong> -
+                                                                            <span>{{ comment.submitted_at|date:'d M, Y' }}</span>
+                                                                        </span>
+                                                                            <div class="rating">
+                                                                                <div class="star-content">
+                                                                                    <div class="star"></div>
+                                                                                    <div class="star"></div>
+                                                                                    <div class="star"></div>
+                                                                                    <div class="star"></div>
+                                                                                    <div class="star"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="spr-review-content">
+                                                                            <p class="spr-review-content-body">
+                                                                                {{ comment.comment }}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                        <form action="" class="new-review-form">
+
+                                                            <input type="hidden" name="review[rating]" value="3">
+                                                            <input type="hidden" name="product_id">
+                                                            <h3 class="spr-form-title">Write a review</h3>
+                                                            <fieldset>
+                                                                <div class="spr-form-review-rating">
+                                                                    <label class="spr-form-label">Your Rating</label>
+                                                                    <fieldset class="ratings">
+                                                                        <input type="radio" id="star5" name="rating"
+                                                                               value="5"/>
+                                                                        <label class="full" for="star5"
+                                                                               title="Awesome - 5 stars"></label>
+                                                                        <input type="radio" id="star4half" name="rating"
+                                                                               value="4 and a half"/>
+                                                                        <input type="radio" id="star4" name="rating"
+                                                                               value="4"/>
+                                                                        <label class="full" for="star4"
+                                                                               title="Pretty good - 4 stars"></label>
+                                                                        <input type="radio" id="star3half" name="rating"
+                                                                               value="3 and a half"/>
+                                                                        <input type="radio" id="star3" name="rating"
+                                                                               value="3"/>
+                                                                        <label class="full" for="star3"
+                                                                               title="Meh - 3 stars"></label>
+                                                                        <input type="radio" id="star2half" name="rating"
+                                                                               value="2 and a half"/>
+                                                                        <input type="radio" id="star2" name="rating"
+                                                                               value="2"/>
+                                                                        <label class="full" for="star2"
+                                                                               title="Kinda bad - 2 stars"></label>
+                                                                        <input type="radio" id="star1half" name="rating"
+                                                                               value="1 and a half"/>
+                                                                        <input type="radio" id="star1" name="rating"
+                                                                               value="1"/>
+                                                                        <label class="full" for="star1"
+                                                                               title="Sucks big time - 1 star"></label>
+                                                                        <input type="radio" id="starhalf" name="rating"
+                                                                               value="half"/>
+                                                                    </fieldset>
+                                                                </div>
+                                                            </fieldset>
+                                                            <form method="post"
+                                                                  action="{% url 'product:detail' pk=object.pk %}">
+                                                                {% csrf_token %}
+                                                                <fieldset>
+                                                                    <div class="spr-form-review-body">
+                                                                        <div class="spr-form-input">
+                                                                        <textarea name="comment"
+                                                                                  class="spr-form-input-textarea"
+                                                                                  rows="10"
+                                                                                  placeholder="Write your comments here"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </fieldset>
+                                                                <div class="submit">
+                                                                    <button type="submit" class="btn btn-secondary">
+                                                                        Submit
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="related">
+                                                <div class="title-tab-content  text-center">
+                                                    <div class="title-product justify-content-start">
+                                                        <h2>Related Products</h2>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-content">
+                                                    <div class="row">
+                                                        {% for product in object.get_related_products %}
+                                                            <div class="item text-center col-md-4">
+                                                                <div class="product-miniature js-product-miniature item-one first-item">
+                                                                    <div class="thumbnail-container border border">
+                                                                        <a href="{% url 'product:detail' pk=product.pk %}">
+                                                                            <img class="img-fluid image-cover"
+                                                                                 src="{{ object.image_1.url }}"
+                                                                                 alt="img">
+                                                                            <img class="img-fluid image-secondary"
+                                                                                 src="{{ object.image_2.url }}"
+                                                                                 alt="img">
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="product-description">
+                                                                        <div class="product-groups">
+                                                                            <div class="product-title">
+                                                                                <a href="{% url 'product:detail' pk=product.pk %}">
+                                                                                    {{ object.title }}</a>
+                                                                            </div>
+                                                                            <div class="rating">
+                                                                                <div class="star-content">
+                                                                                    <div class="star"></div>
+                                                                                    <div class="star"></div>
+                                                                                    <div class="star"></div>
+                                                                                    <div class="star"></div>
+                                                                                    <div class="star"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="product-group-price">
+                                                                                <div class="product-price-and-shipping">
+                                                                                    <span class="price">£{{ product.price }}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="product-buttons d-flex justify-content-center">
+                                                                            <form action="#" method="post"
+                                                                                  class="formAddToCart">
+                                                                                <a class="add-to-cart" href="#"
+                                                                                   data-button-action="add-to-cart">
+                                                                                    <i class="fa fa-shopping-cart"
+                                                                                       aria-hidden="true"></i>
+                                                                                </a>
+                                                                            </form>
+                                                                            <a class="addToWishlist" href="#"
+                                                                               data-rel="1"
+                                                                               onclick="">
+                                                                                <i class="fa fa-heart"
+                                                                                   aria-hidden="true"></i>
+                                                                            </a>
+                                                                            <a href="#"
+                                                                               class="quick-view hidden-sm-down"
+                                                                               data-link-action="quickview">
+                                                                                <i class="fa fa-eye"
+                                                                                   aria-hidden="true"></i>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+
+    <script>
+        function addUrlParameter(name, value) {
+            let searchParams = new URLSearchParams(window.location.search)
+            if (searchParams.has(name) && searchParams.get(name) === value) {
+                searchParams.delete(name)
+            } else {
+                searchParams.set(name, value)
+            }
+            window.location.search = searchParams.toString()
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+{% endblock %}

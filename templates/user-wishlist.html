@@ -1,0 +1,125 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load i18n %}
+{% load my_tags %}
+{% block content %}
+    <div class="main-content">
+        <div id="wrapper-site">
+            <div id="content-wrapper" class="full-width">
+                <div id="main">
+                    <div class="page-home">
+                        <nav class="breadcrumb-bg">
+                            <div class="container no-index">
+                                <div class="breadcrumb">
+                                    <ol>
+                                        <li>
+                                            <a href="{% url 'home:home' %}">
+                                                <span>Home</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'product:list' %}">
+                                                <span>All Products</span>
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </nav>
+                        <div class="container">
+                            <div class="content">
+                                <div class="row">
+                                    <div class="col-sm-8 col-lg-9 col-md-8 product-container">
+                                        <div class="tab-content product-items">
+                                            <div id="grid" class="related tab-pane fade in active show">
+                                                <div class="row">
+                                                    {% for product in products %}
+                                                        <div class="item text-center col-md-3">
+                                                            <div class="product-miniature js-product-miniature item-one first-item">
+                                                                <div class="thumbnail-container border">
+                                                                    <a href="{% url 'product:detail' pk=product.pk %}">
+                                                                        <img class="img-fluid image-cover"
+                                                                             src="{{ product.image_1.url }}" alt="img">
+                                                                        <img class="img-fluid image-secondary"
+                                                                             src="{{ product.image_2.url }}" alt="img">
+                                                                    </a>
+                                                                </div>
+                                                                <div class="product-description">
+                                                                    <div class="product-groups">
+                                                                        <div class="product-title">
+                                                                            <a href="{% url 'product:detail' pk=product.pk %}">
+                                                                                {{ product.title }}</a>
+                                                                        </div>
+                                                                        <div class="rating">
+                                                                            <div class="star-content">
+                                                                                <div class="star"></div>
+                                                                                <div class="star"></div>
+                                                                                <div class="star"></div>
+                                                                                <div class="star"></div>
+                                                                                <div class="star"></div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="product-group-price">
+                                                                            <div class="product-price-and-shipping">
+                                                                                <span class="price">£{{ product.price }}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="product-buttons d-flex justify-content-center">
+                                                                        <form action="#" method="post"
+                                                                              class="formAddToCart">
+                                                                            <input type="hidden" name="id_product"
+                                                                                   value="1">
+                                                                            <a class="add-to-cart" href="#"
+                                                                               data-button-action="add-to-cart">
+                                                                                <i class="fa fa-shopping-cart"
+                                                                                   aria-hidden="true"></i>
+                                                                            </a>
+                                                                        </form>
+                                                                        <a {% if product|in_wishlist:request %}
+                                                                            style="background: red" {% endif %}
+                                                                            class="addToWishlist"
+                                                                            href="{% url 'product:add-wishlist' pk=product.pk %}?next={{ request.path }}?{{ request.GET.urlencode }}"
+                                                                            data-rel="1"
+                                                                            onclick="">
+                                                                            <i class="fa fa-heart"
+                                                                               aria-hidden="true"></i>
+                                                                        </a>
+                                                                        <a href="{% url 'product:detail' pk=product.pk %}"
+                                                                           class="quick-view hidden-sm-down"
+                                                                           data-link-action="quickview">
+                                                                            <i class="fa fa-eye" aria-hidden="true"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+
+    <script>
+        function addUrlParameter(name, value) {
+            let searchParams = new URLSearchParams(window.location.search)
+            if (searchParams.has(name) && searchParams.get(name) === value) {
+                searchParams.delete(name)
+            } else {
+                searchParams.set(name, value)
+            }
+            window.location.search = searchParams.toString()
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+{% endblock %}

@@ -1,0 +1,64 @@
+<div class="sidebar-3 sidebar-collection col-lg-3 col-md-4 col-sm-4">
+    <div class="sidebar-block">
+        <div class="title-block">
+            <a href="{% url 'product:list' %}">All Products</a></div>
+        <div class="new-item-content">
+            <h3 class="title-product">Categories</h3>
+            <ul class="scroll-product">
+                {% for category in categories %}
+                    <li>
+                        <a onclick="addUrlParameter('cat', '{{ category.pk }}')">
+                            <b>{{ category.title }}</b>
+                            <span class="quantity">({{ category.products.count }})</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="new-item-content">
+            <h3 class="title-product">Brands</h3>
+            <ul class="scroll-product">
+                {% for brand in brands %}
+                    <li>
+                        <a onclick="addUrlParameter('brand', '{{ brand.pk }}')">
+                            <b>{{ brand.title }}</b>
+                            <span class="quantity">({{ brand.products.count }})</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="sidebar-block product-tags">
+        <div class="title-block">
+            Product Tags
+        </div>
+        <div class="block-content">
+            <ul class="listSidebarBlog list-unstyled">
+                {% for tag in tags %}
+                    <li>
+                        <a onclick="addUrlParameter('tag', '{{ tag.pk }}')" title="Show products matching tag Hot Trend">
+                            {{ tag.title }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% block extra_js %}
+
+    <script>
+        function addUrlParameter(name, value) {
+            let searchParams = new URLSearchParams(window.location.search)
+            if (searchParams.has(name) && searchParams.get(name) === value) {
+                searchParams.delete(name)
+            } else {
+                searchParams.set(name, value)
+            }
+            window.location.search = searchParams.toString()
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+{% endblock %}
